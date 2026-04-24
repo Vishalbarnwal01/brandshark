@@ -29,6 +29,7 @@
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      background-color: var(--roast-bg-color);
     }
 
     @media screen and (min-width: 750px) {
@@ -73,6 +74,23 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+  
+  {% assign roast_level = product.metafields.custom.roast_level.value | default: 1 %}
+
+ {% case roast_level %}
+  {% when 1 %}
+    {% assign bg_color = '#fdf9f7' %}  <!-- almost white -->
+  {% when 2 %}
+    {% assign bg_color = '#faf3ef' %}  <!-- very light pinkish -->
+  {% when 3 %}
+    {% assign bg_color = '#f6ebe5' %}  <!-- light beige -->
+  {% when 4 %}
+    {% assign bg_color = '#f1e1d8' %}  <!-- soft coffee -->
+  {% when 5 %}
+    {% assign bg_color = '#ead6cb' %}  <!-- slightly deeper but still light -->
+    
+{% endcase %}
+
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
@@ -197,6 +215,36 @@
                     {{ product.description }}
                   </div>
                 {%- endif -%}
+
+             {% assign roast_level = product.metafields.custom.roast_level.value | default: 0 %}
+{% assign roast_text = product.metafields.custom.roast_text.value %}
+{% assign coffee_type = product.metafields.custom.coffee_type.value %}
+{% assign roast_color = product.metafields.custom.roast_color.value | default: '#c9725d' %}
+
+<div class="coff_type_main" style="display:flex; align-items:center;">
+
+  <!-- Circles -->
+  <div class="cricleDiv" style="display:flex; gap:6px;">
+    {% for i in (1..5) %}
+      <div 
+        class="cricle"
+        style="
+          width:12px;
+          height:12px;
+          border-radius:50%;
+          border:1px solid {{ roast_color }};
+          background-color: {% if i <= roast_level %}{{ roast_color }}{% else %}transparent{% endif %};
+        ">
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Text -->
+  <p style="margin-left:10px; color: {{ roast_color }}; text-transform:uppercase;">
+    {{ roast_text }} <span>|</span> {{ coffee_type }}
+  </p>
+
+</div>
               {%- when 'sku' -%}
                 <p
                   class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
