@@ -3595,3 +3595,11 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+/* ------------------------------------------------ */
+
+.product__description h5 {
+    font-size: 17px;
+    margin-bottom: 0;
+    color: rgb(201, 114, 93);
+    margin-top: 16px !important;
+}

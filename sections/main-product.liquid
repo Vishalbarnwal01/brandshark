@@ -79,22 +79,45 @@
 
  {% case roast_level %}
   {% when 1 %}
-    {% assign bg_color = '#fdf9f7' %}  <!-- almost white -->
+    {% assign bg_color = '#fdf9f7' %} 
   {% when 2 %}
-    {% assign bg_color = '#faf3ef' %}  <!-- very light pinkish -->
+    {% assign bg_color = '#faf3ef' %} 
   {% when 3 %}
-    {% assign bg_color = '#f6ebe5' %}  <!-- light beige -->
+    {% assign bg_color = '#f6ebe5' %}  
   {% when 4 %}
-    {% assign bg_color = '#f1e1d8' %}  <!-- soft coffee -->
+    {% assign bg_color = '#f1e1d8' %} 
   {% when 5 %}
-    {% assign bg_color = '#ead6cb' %}  <!-- slightly deeper but still light -->
+    {% assign bg_color = '#ead6cb' %}  
     
 {% endcase %}
 
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
-        {% render 'product-media-gallery', variant_images: variant_images %}
+        {{ 'product-swiper.css' | asset_url | stylesheet_tag }}
+        {{ 'product-swiper.js' | asset_url | script_tag }}
+
+        <div class="product-swiper-wrapper">
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              {%- for image in product.images -%}
+                <div class="swiper-slide">
+                  <img
+                    src="{{ image | image_url: width: 2048 }}"
+                    alt="{{ image.alt | escape }}"
+                    loading="lazy"
+                    decoding="async"
+                    class="product-media-image"
+                  />
+                </div>
+              {%- endfor -%}
+            </div>
+
+            <div class="swiper-button-prev" aria-hidden="true"></div>
+            <div class="swiper-button-next" aria-hidden="true"></div>
+            <div class="swiper-pagination" aria-hidden="true"></div>
+          </div>
+        </div>
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -208,7 +231,7 @@
                       {%- endif -%}
                     {%- endif -%}
                   {%- endif -%}
-                </p>
+                </p>brand
               {%- when 'description' -%}
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
