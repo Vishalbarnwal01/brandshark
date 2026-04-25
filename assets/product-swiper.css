@@ -130,3 +130,25 @@
     width: 24px;
   }
 }
+
+/* Variant options custom layout */
+.product-options.custom-layout {
+  display: block;
+  gap: 16px;
+}
+.product-options.custom-layout .option-top {
+  margin-bottom: 12px;
+}
+.product-options.custom-layout .option-row {
+  display: flex;
+  gap: 12px;
+}
+.product-options.custom-layout .option-half {
+  flex: 1 1 0;
+}
+
+@media screen and (max-width: 768px) {
+  .product-options.custom-layout .option-row {
+    flex-direction: column;
+  }
+}
